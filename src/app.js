@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import authRoute from '#routes/auth.routes.js';
+import { securityMiddleware } from '#middlewares/security.middleware.js';
 
 const app = express();
 app.use(cors());
@@ -20,6 +21,7 @@ app.use(
   })
 );
 
+app.use(securityMiddleware);
 app.get('/', (req, res) => {
   logger.info('hello from acqusitions');
   res.status(200).send('hello from acqusitions');
