@@ -29,7 +29,7 @@ export const securityMiddleware = async (req, res, next) => {
         mode: 'LIVE',
         interval: '1m',
         max: limit,
-        nme: `${role}-rate-limit`,
+        name: `${role}-rate-limit`,
       })
     );
     const decision = await client.protect(req);
@@ -46,7 +46,7 @@ export const securityMiddleware = async (req, res, next) => {
     if (decision.isDenied() && decision.reason.isShield()) {
       logger.warn('Shiels blocked req', {
         ip: req.ip,
-        userAgent: req.get['user-agent'],
+        userAgent: req.get('user-agent'),
         path: req.path,
         method: req.method,
       });
@@ -71,3 +71,7 @@ export const securityMiddleware = async (req, res, next) => {
       .json({ error: 'inernal server error', message: 'Something went wrong' });
   }
 };
+/*I implemented API security using Arcjet with a layered approach.
+First, I configured global protection including bot detection, request shielding, and basic rate limiting.
+Then I created a custom middleware where rate limits are dynamically applied based on user roles like admin, user, and guest.
+Finally, I handled different security decisions such as bot blocking, shield violations, and rate limiting with proper logging and HTTP responses.*/
